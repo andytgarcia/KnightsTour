@@ -22,4 +22,12 @@ public class Location {
     public void setCol(int col) {
         this.col = col;
     }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "row=" + row +
+                ", col=" + col +
+                '}';
+    }
 }

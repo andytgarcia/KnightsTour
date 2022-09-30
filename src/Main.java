@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
@@ -34,8 +35,8 @@ public class Main {
     static Location startLoc;
 
     public static void main(String[] args) {
-        Location testLoc = new Location(1,1);
-        System.out.println(isValid(testLoc));
+
+
 
         System.out.println("START");
         initExhausted();
@@ -43,9 +44,13 @@ public class Main {
         obtainStartLoc();
         System.out.println("Start Loc is " + startLoc);
 
+        System.out.println(getPossibleMoves(startLoc));
+
         stack.push(startLoc);
         visited[startLoc.getRow()][startLoc.getCol()] = true;
         board[startLoc.getRow()][startLoc.getCol()] = 1;
+
+
 
         while(stack.size() != rowL * colL && stack.size() != 0)
         {
@@ -116,7 +121,16 @@ public class Main {
      */
     public static boolean inExhausted(Location source, Location dest)
     {
+        /*for (int i = 0; i < exhausted.size(); i++) {
+            for (int j = 0; j < exhausted.get(i).size(); j++) {
+                if (exhausted.get(i).get(j) == )
+            }
+        }
+
+         */
         return false;
+
+
     }
 
     /*
@@ -132,7 +146,7 @@ public class Main {
      */
     public static int convertLocToIndex(Location loc)
     {
-        return (loc.getRow()*rowL) + loc.getCol();
+        return (loc.getRow()*rowL) + (loc.getCol() * colL);
     }
 
     /*
@@ -147,7 +161,7 @@ public class Main {
      * is this Location a valid one
      */
     public static boolean isValid(Location loc) {
-        return loc.getRow() >= 0 && loc.getRow() < board.length-1 && loc.getCol() >= 0 && loc.getCol() < board[rowL].length-1;
+        return loc.getRow() >= 0 && loc.getRow() < board.length && loc.getCol() >= 0 && loc.getCol() < board[0].length;
     }
 
     /*
@@ -156,7 +170,35 @@ public class Main {
      */
     public static ArrayList<Location> getPossibleMoves(Location loc)
     {
-        return null;
+        ArrayList<Location> posLocs = new ArrayList<>();
+        Location p1, p2, p3, p4, p5, p6, p7, p8;
+        p1 = new Location(loc.getRow() -2, loc.getCol() + 1);
+        p2 = new Location(loc.getRow() -1, loc.getCol() + 2);
+        p3 = new Location(loc.getRow() + 1, loc.getCol() + 2);
+        p4 = new Location(loc.getRow() + 2, loc.getCol() + 1);
+        p5 = new Location(loc.getRow() + 2, loc.getCol()-1);
+        p6 = new Location(loc.getRow()+1, loc.getCol() - 2);
+        p7 = new Location(loc.getRow() -1, loc.getCol() - 2);
+        p8 = new Location(loc.getRow() - 2, loc.getCol() - 1);
+
+        if (isValid(p1))
+            posLocs.add(p1);
+        if (isValid(p2))
+            posLocs.add(p2);
+        if (isValid(p3))
+            posLocs.add(p3);
+        if (isValid(p4))
+            posLocs.add(p4);
+        if (isValid(p5))
+            posLocs.add(p5);
+        if (isValid(p6))
+            posLocs.add(p6);
+        if (isValid(p7))
+            posLocs.add(p7);
+        if (isValid(p8))
+            posLocs.add(p8);
+
+        return posLocs;
     }
 
 
@@ -165,6 +207,7 @@ public class Main {
      */
     public static void obtainStartLoc()
     {
+        startLoc = new Location(2,2);
 
     }
 
