@@ -8,6 +8,10 @@ import java.util.Scanner;
 import javax.swing.JOptionPane;
 
 
+///moves
+//get all possible moves, don't move to locs that are on the board or in the exhausted list, choose move, push stack, add move to exhausted
+//if ur stuck
+//pop stack, clear board location, clear exhausted for undone move
 
 
 
@@ -44,13 +48,14 @@ public class Main {
         obtainStartLoc();
         System.out.println("Start Loc is " + startLoc);
 
-        System.out.println(getPossibleMoves(startLoc));
+        printPossibleMoveLocations(startLoc);
+        printBoard();
 
         stack.push(startLoc);
         visited[startLoc.getRow()][startLoc.getCol()] = true;
         board[startLoc.getRow()][startLoc.getCol()] = 1;
 
-
+        printBoard();
 
         while(stack.size() != rowL * colL && stack.size() != 0)
         {
@@ -66,7 +71,14 @@ public class Main {
      */
     public static void printExhausedList(Location loc)
     {
-
+        for (int i = 0; i < exhausted.size(); i++) {
+            if (i == convertLocToIndex(loc)) {
+                System.out.print("Exhausted List for this given loc: ");
+                for (int j = 0; j < exhausted.get(i).size(); j++) {
+                    System.out.print(exhausted.get(i).get(j));
+                }
+            }
+        }
     }
 
     /*
@@ -74,7 +86,11 @@ public class Main {
      */
     public static void printPossibleMoveLocations(Location loc)
     {
-
+        ArrayList<Location> ans = getPossibleMoves(loc);
+        System.out.print("Possible Moves: ");
+        for (int i = 0; i < ans.size(); i++) {
+            System.out.print(ans.get(i));
+        }
     }
 
     /*
@@ -84,11 +100,13 @@ public class Main {
     {
         for (int i = 0; i < board.length; i++) {
             System.out.println();
-            for (int j = 0; j < board[rowL].length; j++) {
+            for (int j = 0; j < board[0].length; j++) {
                 System.out.print(board[i][j]);
                 System.out.print(" ");
             }
         }
+        System.out.println();
+        System.out.println();
     }
 
     /*
@@ -96,7 +114,10 @@ public class Main {
      */
     public static void printVisited()
     {
-
+        System.out.print("All moves: ");
+        for (int i = 0; i < stack.size(); i++) {
+            System.out.print(stack.get(i));
+        }
     }
 
     /*
@@ -105,7 +126,13 @@ public class Main {
      */
     public static void clearExhausted(Location loc)
     {
-
+        for (int i = 0; i < exhausted.size(); i++) {
+            if (i == convertLocToIndex(loc)){
+                for (int j = exhausted.get(i).size() - 1; j > 0; j--) {
+                    exhausted.get(i).remove(exhausted.get(i).get(j));
+                }
+            }
+        }
     }
 
     /*
@@ -121,14 +148,17 @@ public class Main {
      */
     public static boolean inExhausted(Location source, Location dest)
     {
-        /*for (int i = 0; i < exhausted.size(); i++) {
-            for (int j = 0; j < exhausted.get(i).size(); j++) {
-                if (exhausted.get(i).get(j) == )
-            }
+        for (int i = 0; i < exhausted.size(); i++) {
+           if (i == convertLocToIndex(source)) {
+               for (int j = 0; j < exhausted.get(i).size(); j++) {
+                   if (exhausted.get(i).get(j) == dest) {
+                       return true;
+                   }
+               }
+           }
         }
-
-         */
         return false;
+
 
 
     }
@@ -154,7 +184,11 @@ public class Main {
      */
     public static void addToExhausted(Location source, Location dest)
     {
-
+        for (int i = 0; i < exhausted.size(); i++) {
+            if (i == convertLocToIndex(source)){
+                exhausted.get(i).add(dest);
+            }
+        }
     }
 
     /*
@@ -207,7 +241,10 @@ public class Main {
      */
     public static void obtainStartLoc()
     {
-        startLoc = new Location(2,2);
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter your start location: ");
+
+        startLoc = new Location(1,1);
 
     }
 
