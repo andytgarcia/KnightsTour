@@ -55,7 +55,12 @@ public class Main {
         visited[startLoc.getRow()][startLoc.getCol()] = true;
         board[startLoc.getRow()][startLoc.getCol()] = 1;
 
-        printBoard();
+
+        addToExhausted(startLoc, getNextMove(startLoc, getPossibleMoves(startLoc)));
+        printExhausedList(startLoc);
+
+
+
 
         while(stack.size() != rowL * colL && stack.size() != 0)
         {
@@ -71,13 +76,10 @@ public class Main {
      */
     public static void printExhausedList(Location loc)
     {
-        for (int i = 0; i < exhausted.size(); i++) {
-            if (i == convertLocToIndex(loc)) {
-                System.out.print("Exhausted List for this given loc: ");
-                for (int j = 0; j < exhausted.get(i).size(); j++) {
-                    System.out.print(exhausted.get(i).get(j));
-                }
-            }
+        System.out.println("Exhausted List for given loc: ");
+        for (int i = 0; i < exhausted.get(convertLocToIndex(loc)).size(); i++) {
+            System.out.print(exhausted.get(convertLocToIndex(loc)).get(i));
+
         }
     }
 
@@ -136,10 +138,13 @@ public class Main {
     }
 
     /*
-     * set up the exhausted list with empty exhuasted lists.
+     * set up the exhausted list with empty exhausted lists.
      */
     public static void initExhausted()
     {
+        for (int i = 0; i < exhausted.size(); i++) {
+            exhausted.add(new ArrayList<Location>(25));
+        }
 
     }
 
@@ -168,6 +173,11 @@ public class Main {
      */
     public static Location getNextMove(Location loc, ArrayList<Location> list)
     {
+        for (int i = 0; i < list.size(); i++) {
+            if (!inExhausted(loc,list.get(i))) {
+                return list.get(i);
+            }
+        }
         return null;
     }
 
