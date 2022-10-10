@@ -210,7 +210,7 @@ public class Main {
      */
     public static int convertLocToIndex(Location loc)
     {
-        return (loc.getRow()*rowL) + (loc.getCol() * colL);
+        return (loc.getRow()*rowL) + (loc.getCol());
     }
 
     /*
@@ -273,8 +273,11 @@ public class Main {
     {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter your start location: ");
-
-        startLoc = new Location(1,1);
+        System.out.println("Enter the starting row: ");
+        int row = scanner.nextInt();
+        System.out.println("Enter the starting column: ");
+        int col = scanner.nextInt();
+        startLoc = new Location(row,col);
 
     }
 
