@@ -80,7 +80,7 @@ public class Main {
             printBoard();
             addToExhausted(prev, next);
             printExhausedList(prev);
-            System.out.println(getPossibleMoves(prev));
+            System.out.println("Possible moves for this loc: " + getPossibleMoves(prev));
             stack.push(next);
             board[next.getRow()][next.getCol()] = count;
             count++;
