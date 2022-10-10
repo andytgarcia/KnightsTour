@@ -55,15 +55,38 @@ public class Main {
         visited[startLoc.getRow()][startLoc.getCol()] = true;
         board[startLoc.getRow()][startLoc.getCol()] = 1;
 
+        
 
-        addToExhausted(startLoc, getNextMove(startLoc, getPossibleMoves(startLoc)));
+        /*currentPossible = getPossibleMoves(startLoc);
+        Location nextMove = getNextMove(startLoc, currentPossible);
+        
         printExhausedList(startLoc);
-
-
-
+        stack.push(nextMove);
+        board[nextMove.getRow()][nextMove.getCol()] = 2;
+        printBoard();
+        clearExhausted(startLoc);
+        printExhausedList(startLoc);
+        */
+        
+        currentPossible = getPossibleMoves(startLoc);
+        Location prev = startLoc;
+        Location next = getNextMove(startLoc, currentPossible);
+        int count = 2;
+        Location temp;
 
         while(stack.size() != rowL * colL && stack.size() != 0)
         {
+
+            printBoard();
+            addToExhausted(prev, next);
+            printExhausedList(prev);
+            System.out.println(getPossibleMoves(prev));
+            stack.push(next);
+            board[next.getRow()][next.getCol()] = count;
+            count++;
+            temp = next;
+            next = getNextMove(temp, getPossibleMoves(temp));
+            prev = temp;
 
 
         }
@@ -142,8 +165,9 @@ public class Main {
      */
     public static void initExhausted()
     {
-        for (int i = 0; i < exhausted.size(); i++) {
-            exhausted.add(new ArrayList<Location>(25));
+        ArrayList<Location> temp = new ArrayList<Location>(25);
+        for (int i = 0; i < 25; i++) {
+            exhausted.add(temp);
         }
 
     }
@@ -194,11 +218,7 @@ public class Main {
      */
     public static void addToExhausted(Location source, Location dest)
     {
-        for (int i = 0; i < exhausted.size(); i++) {
-            if (i == convertLocToIndex(source)){
-                exhausted.get(i).add(dest);
-            }
-        }
+        exhausted.get(convertLocToIndex(source)).add(dest);
     }
 
     /*
