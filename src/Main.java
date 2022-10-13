@@ -44,6 +44,7 @@ public class Main {
 
         System.out.println("START");
         initExhausted();
+
         ArrayList<Location> currentPossible;
         obtainStartLoc();
         System.out.println("Start Loc is " + startLoc);
@@ -55,31 +56,35 @@ public class Main {
         visited[startLoc.getRow()][startLoc.getCol()] = true;
         board[startLoc.getRow()][startLoc.getCol()] = 1;
 
-        
 
-        /*currentPossible = getPossibleMoves(startLoc);
-        Location nextMove = getNextMove(startLoc, currentPossible);
-        
-        printExhausedList(startLoc);
-        stack.push(nextMove);
-        board[nextMove.getRow()][nextMove.getCol()] = 2;
-        printBoard();
-        clearExhausted(startLoc);
-        printExhausedList(startLoc);
-        */
+
         
         currentPossible = getPossibleMoves(startLoc);
         Location prev = startLoc;
         Location next = getNextMove(startLoc, currentPossible);
+
+        addToExhausted(startLoc, next);
+        System.out.println(exhausted.get(6).size());
+        System.out.println(exhausted.get(0).size());
+
         int count = 2;
         Location temp;
 
         while(stack.size() != rowL * colL && stack.size() != 0)
         {
 
+        if (inExhausted(prev, getNextMove(prev,currentPossible))) {
+            currentPossible.remove(0);
+            if (getNextMove(prev, currentPossible) == null) {
+                clearExhausted(prev);
+                stack.pop();
+            }
+        }
+        else {
             printBoard();
             addToExhausted(prev, next);
             printExhausedList(prev);
+            System.out.println();
             System.out.println("Possible moves for this loc: " + getPossibleMoves(prev));
             stack.push(next);
             board[next.getRow()][next.getCol()] = count;
@@ -88,7 +93,7 @@ public class Main {
             next = getNextMove(temp, getPossibleMoves(temp));
             prev = temp;
 
-
+        }
         }
 
 
@@ -99,7 +104,8 @@ public class Main {
      */
     public static void printExhausedList(Location loc)
     {
-        System.out.println("Exhausted List for given loc: ");
+        System.out.println("Exhausted List for " + loc + ": ");
+        System.out.println();
         for (int i = 0; i < exhausted.get(convertLocToIndex(loc)).size(); i++) {
             System.out.print(exhausted.get(convertLocToIndex(loc)).get(i));
 
@@ -165,9 +171,8 @@ public class Main {
      */
     public static void initExhausted()
     {
-        ArrayList<Location> temp = new ArrayList<Location>(25);
         for (int i = 0; i < 25; i++) {
-            exhausted.add(temp);
+            exhausted.add(new ArrayList<Location>(25));
         }
 
     }
@@ -177,19 +182,12 @@ public class Main {
      */
     public static boolean inExhausted(Location source, Location dest)
     {
-        for (int i = 0; i < exhausted.size(); i++) {
-           if (i == convertLocToIndex(source)) {
-               for (int j = 0; j < exhausted.get(i).size(); j++) {
-                   if (exhausted.get(i).get(j) == dest) {
-                       return true;
+        for (int j = 0; j < exhausted.get(convertLocToIndex(source)).size(); j++) {
+            if (exhausted.get(convertLocToIndex(source)).get(j) == dest) {
+                return true;
                    }
                }
-           }
-        }
         return false;
-
-
-
     }
 
     /*
@@ -198,7 +196,7 @@ public class Main {
     public static Location getNextMove(Location loc, ArrayList<Location> list)
     {
         for (int i = 0; i < list.size(); i++) {
-            if (!inExhausted(loc,list.get(i))) {
+            if (!(inExhausted(loc,list.get(i)))) {
                 return list.get(i);
             }
         }
@@ -210,7 +208,7 @@ public class Main {
      */
     public static int convertLocToIndex(Location loc)
     {
-        return (loc.getRow()*rowL) + (loc.getCol());
+        return (loc.getRow()*5) + (loc.getCol());
     }
 
     /*
@@ -218,7 +216,11 @@ public class Main {
      */
     public static void addToExhausted(Location source, Location dest)
     {
-        exhausted.get(convertLocToIndex(source)).add(dest);
+        for (int i = 0; i < exhausted.size(); i++) {
+            if (i == convertLocToIndex(source)) {
+                exhausted.get(i).add(dest);
+            }
+        }
     }
 
     /*
