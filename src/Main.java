@@ -183,7 +183,7 @@ public class Main {
     public static boolean inExhausted(Location source, Location dest)
     {
         for (int j = 0; j < exhausted.get(convertLocToIndex(source)).size(); j++) {
-            if (exhausted.get(convertLocToIndex(source)).get(j) == dest) {
+            if (exhausted.get(convertLocToIndex(source)).get(j).getRow() == dest.getRow() && exhausted.get(convertLocToIndex(source)).get(j).getCol() == dest.getCol()) {
                 return true;
                    }
                }
@@ -196,7 +196,7 @@ public class Main {
     public static Location getNextMove(Location loc, ArrayList<Location> list)
     {
         for (int i = 0; i < list.size(); i++) {
-            if (!(inExhausted(loc,list.get(i)))) {
+            if (!inExhausted(loc,list.get(i))) {
                 return list.get(i);
             }
         }
