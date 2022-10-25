@@ -13,7 +13,16 @@ import javax.swing.JOptionPane;
 //if ur stuck
 //pop stack, clear board location, clear exhausted for undone move
 
-
+/*
+ * getPossibleMoves;
+ * getNextMOve
+ * if getNextMOve ! inExhausted
+ *  stack.push
+ *  addExhausted
+ * else
+ *  stack.pop
+ *  clearexhausted
+ */
 
 /*
     0   1   2   3   4
@@ -63,7 +72,7 @@ public class Main {
         Location prev = startLoc;
         Location next = getNextMove(startLoc, currentPossible);
 
-        addToExhausted(startLoc, next);
+        
         System.out.println(exhausted.get(6).size());
         System.out.println(exhausted.get(0).size());
 
@@ -72,8 +81,35 @@ public class Main {
 
         while(stack.size() != rowL * colL && stack.size() != 0)
         {
+            printExhausedList(prev);
+            if(!inExhausted(prev, next) && board[next.getRow()][next.getCol()] == 0) {
+                printBoard();
+                stack.push(next);
+                addToExhausted(prev, next);
+                board[next.getRow()][next.getCol()] = count;
+                count++;
+                temp = next;
+                currentPossible = getPossibleMoves(temp);
+                next = getNextMove(temp, currentPossible);
+                prev = temp;
+            }
+            else if(getNextMove(prev, currentPossible) != null) {
+                currentPossible.remove(0);
+                next = getNextMove(prev, currentPossible);
+            }
+            else {
+                stack.pop();
+                clearExhausted(prev);
+                count--;
+                board[prev.getRow()][prev.getCol()] = 0;
+                prev = stack.peek();
+                currentPossible = getPossibleMoves(prev);
+                next = getNextMove(prev, currentPossible);
+            }
 
-        if (inExhausted(prev, getNextMove(prev,currentPossible))) {
+
+        }
+        /*if (inExhausted(prev, getNextMove(prev,currentPossible))) {
             currentPossible.remove(0);
             if (getNextMove(prev, currentPossible) == null) {
                 clearExhausted(prev);
@@ -90,14 +126,15 @@ public class Main {
             board[next.getRow()][next.getCol()] = count;
             count++;
             temp = next;
-            next = getNextMove(temp, getPossibleMoves(temp));
+            currentPossible = getPossibleMoves(temp);
+            next = getNextMove(temp, currentPossible);
             prev = temp;
 
+        }*/
         }
-        }
-
-
-    }
+    
+    
+    
 
     /*
      * Printed out the exhausted list for a given Location
