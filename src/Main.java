@@ -79,35 +79,38 @@ public class Main {
         int count = 2;
         Location temp;
 
+        printBoard();
+
         while(stack.size() != rowL * colL && stack.size() != 0)
         {
-            printExhausedList(prev);
-            if(!inExhausted(prev, next) && board[next.getRow()][next.getCol()] == 0) {
-                printBoard();
+            
+            if(next != null && (board[next.getRow()][next.getCol()] == 0 && !inExhausted(prev, next))) {
+            
                 stack.push(next);
                 addToExhausted(prev, next);
+                printExhausedList(prev);
                 board[next.getRow()][next.getCol()] = count;
                 count++;
                 temp = next;
                 currentPossible = getPossibleMoves(temp);
                 next = getNextMove(temp, currentPossible);
                 prev = temp;
+                printBoard();
             }
-            else if(getNextMove(prev, currentPossible) != null) {
-                currentPossible.remove(0);
-                next = getNextMove(prev, currentPossible);
-            }
+            
             else {
-                stack.pop();
-                clearExhausted(prev);
-                count--;
-                board[prev.getRow()][prev.getCol()] = 0;
-                prev = stack.peek();
-                currentPossible = getPossibleMoves(prev);
-                next = getNextMove(prev, currentPossible);
-            }
+                    stack.pop();
+                    clearExhausted(prev);
+                    count--;
+                    board[prev.getRow()][prev.getCol()] = 0;
+                    prev = stack.peek();
+                    currentPossible = getPossibleMoves(prev);
+                    next = getNextMove(prev, currentPossible);
+                    printBoard();
+            
+            
 
-
+        }
         }
         /*if (inExhausted(prev, getNextMove(prev,currentPossible))) {
             currentPossible.remove(0);
