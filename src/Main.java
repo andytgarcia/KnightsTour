@@ -99,6 +99,7 @@ public class Main {
             }
             
             else {
+                if(next == null) {
                     stack.pop();
                     clearExhausted(prev);
                     count--;
@@ -107,8 +108,13 @@ public class Main {
                     currentPossible = getPossibleMoves(prev);
                     next = getNextMove(prev, currentPossible);
                     printBoard();
-            
-            
+                }
+                else {
+                    currentPossible.remove(0);
+                    next = getNextMove(prev, currentPossible);
+                    printBoard();
+                    System.out.println("Checking next move");
+                }
 
         }
         }
@@ -235,6 +241,8 @@ public class Main {
      */
     public static Location getNextMove(Location loc, ArrayList<Location> list)
     {
+        if (list.size() == 0)
+            return null;
         for (int i = 0; i < list.size(); i++) {
             if (!inExhausted(loc,list.get(i))) {
                 return list.get(i);
